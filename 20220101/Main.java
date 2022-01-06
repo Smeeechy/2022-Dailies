@@ -13,11 +13,30 @@ class Main {
     for (int i = 0; i < l; i++) {
       list.addNode();
     }
-    System.out.println(list);
+    System.out.println("before: " + list);
+    removeKthLastElement(list, Integer.parseInt(args[1]));
+    System.out.println("after: " + list);
   }
 
   public static void removeKthLastElement(SinglyLinkedList list, int k) {
+    Node kthLast = null;
+    Node current = list.root;
 
+    // iterate k times and then start tracking kthLast until the end of the list
+    for (int i = 0; i < k; i++) {
+      current = current.next;
+    }
+    kthLast = list.root;
+
+    while (current.hasNext()) {
+      current = current.next;
+      kthLast = kthLast.next;
+    }
+
+    //System.out.println("k=" + k);
+    //System.out.println("kth last: " + kthLast.id);
+
+    kthLast.next = kthLast.next.next;
   }
 }
 
