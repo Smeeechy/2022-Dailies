@@ -1,5 +1,5 @@
 /*
-
+PROMPT
 */
 
 class Main {
