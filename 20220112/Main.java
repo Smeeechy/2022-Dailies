@@ -9,8 +9,6 @@ For example, if N = 5 and k = 2, the order of executions would be [2, 4, 1, 5, 3
 Bonus: Find an O(log N) solution if k = 2.
 */
 
-// waited too long to start this one and didn't have enought time to do it right. I'll come back to this soon
-
 import java.util.HashMap;
 
 class Main {
@@ -21,21 +19,21 @@ class Main {
 		for (int i = 0; i < n; i++) {
 			map.put(i, true);
 		}
-		map.forEach((a, b) -> System.out.print(a + ":" + b + " "));
-		System.out.println();
+
 		int key = 0;
-		int counter = 1;
-		while(map.containsValue(true)) {
-			if (counter == k) {
-				map.put(key, false);
-				counter = 1;
-				map.forEach((a, b) -> System.out.print(a + ":" + b + " "));
-				System.out.println();
-			} else {
-				key = (key + 1) % n;
+		int counter = 0;
+		int used = 0;
+		while(used < n) {
+			if (map.get(key)) {
 				counter++;
+				if (counter == k) {
+					map.put(key, false);
+					counter = 0;
+					used++;
+					System.out.println("Prisoner #" + (key + 1) + " killed");
+				}
 			}
+			key = (key + 1) % n;
 		}
-		System.out.println(key);
 	}
 }
