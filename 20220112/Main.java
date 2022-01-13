@@ -9,6 +9,8 @@ For example, if N = 5 and k = 2, the order of executions would be [2, 4, 1, 5, 3
 Bonus: Find an O(log N) solution if k = 2.
 */
 
+// waited too long to start this one and didn't have enought time to do it right. I'll come back to this soon
+
 import java.util.HashMap;
 
 class Main {
