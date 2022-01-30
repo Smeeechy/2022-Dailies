@@ -16,30 +16,80 @@ class Main {
 
 	public static void main(String[] args) {
 		stones = Arrays.stream(args).mapToInt(Integer::parseInt).toArray();
+
+		int leftIndex = leftMax(0);
+		int leftEndIndex = leftCheck(leftIndex);
+		System.out.println(leftEndIndex);
+
+		// 1 find index of longest left side using leftMax()
+		// 2 repeat until leftCheck() succeeds
+		// 3 repeat for right side
+		// 4 repeat until left and right intersect
+		// 5 intersection of the two should be max area
 		
 	}
 
 	public static int leftMax(int startIndex) {
-		
+		int index = 0;
+		int max = 0;
+		for (int i = startIndex; i < stones.length; i++) {
+			int len = 1;
+			for (int j = i + 1; j < stones.length; j++) {
+				if (stones[j] > len) {
+					len++;
+				} else break;
+			}
+			if (len >= max) {
+				max = len;
+				index = i;
+			}
+		}
+		return index;
 	}
 
 	public static int leftCost(int index) {
-		
+		return -1;
 	}
 
 	public static int leftCheck(int index) {
-		
+		boolean valid = true;
+		int curValue = 1;
+		int curIndex = index;
+		System.out.println("increasing from " + curIndex);
+		while (stones[++curIndex] > curValue++) {
+			System.out.print("curIndex=" + curIndex + " ");
+			System.out.println("curValue=" + curValue);
+		}
+		System.out.println("decreasing from " + curIndex);
+		curValue--;
+		while (curValue-- >= 1 && ++curIndex < stones.length) {
+			System.out.print("curIndex=" + curIndex + " ");
+			System.out.println("curValue=" + curValue);
+			if (curIndex > stones.length - 1) {
+				System.out.println("oob at " + curIndex);
+				valid = false;
+				break;
+			}
+			if (stones[curIndex] < curValue) {
+				System.out.println("too short at " + curIndex);
+				valid = false;
+				break;
+			}
+			
+		}
+		if (valid) return --curIndex;
+		else return index;
 	}
 
 	public static int rightMax(int startIndex) {
-		
+		return -1;
 	}
 
 	public static int rightCost(int index) {
-		
+		return -1;
 	}
 
 	public static int rightCheck(int index) {
-		
+		return -1;		
 	}
 }
