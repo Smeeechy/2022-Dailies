@@ -47,7 +47,7 @@ class Main {
 		for (int row = max; row >= 0; row--) {
 			for (int col = 0; col < stones.length; col++) {
 				if (row == 0) System.out.print(col + " ");
-				else if (stones[col] >= row) System.out.print("x ");
+				else if (stones[col] >= row) System.out.print("O ");
 				else System.out.print("  ");
 			}
 			System.out.println();
