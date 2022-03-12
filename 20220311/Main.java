@@ -31,27 +31,43 @@ class VCS {
 		String wd = System.getProperty("user.dir");
 		String[] files = files();
 		try {
+			// delete all old backups
+			if (!Files.exists(Path.of("backups"))) Files.createDirectory(Path.of("backups"));
+			String[] backups = files(wd + "/backups");
+			for (String backup : backups) {
+				Files.delete(Path.of(wd + "/backups/" + backup));
+			}
+
+			// create new backups
 			for (String file : files) {
 				Path source = Path.of(wd + "/" + file);
 				Path target = Path.of(wd + "/backups/" + file);
-				System.out.println(source);
-				System.out.println(target);
+				if (!Files.exists(target)) Files.createFile(target);
 				Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
 			}
 			return true;
 		} catch (Exception e) {
-			System.out.println("borken");
 			e.printStackTrace();
 			return false;
 		}
 	}
 
 	public static boolean pull() {
+		String wd = System.getProperty("user.dir");
+		String[] files = files(wd + "/backups");
 		try {
+			if (!Files.exists(Path.of("backups"))) return false;
+			for (String file : files) {
+				Path source = Path.of(wd + "/backups/" + file);
+				Path target = Path.of(wd + "/" + file);
+				if (!Files.exists(target)) Files.createFile(target);
+				Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+			}
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
-		}				
+		}
 	}
 
 	private static String[] files(String dir) {
