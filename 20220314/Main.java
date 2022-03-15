@@ -7,33 +7,57 @@ get_max: Return a key with the highest value.
 get_min: Return a key with the lowest value.
 */
 
-import java.util.Arrays;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 class Main {
 	public static void main(String[] args) {
-		ArrayList<Integer> test = new ArrayList<>();
-		System.out.println(test.get(0));
+		Struct test = new Struct();
+		test.plus("goobus");
+		System.out.println(test);
+		test.plus("gerbus");
+		System.out.println(test);
+		test.plus("gerbus");
+		System.out.println(test);
+		test.plus("gombus");
+		System.out.println(test);
+		test.minus("goobus");
+		System.out.println(test);
+
+		System.out.println("max: " + test.getMax());
+		System.out.println("min: " + test.getMin());
 	}
 }
 
-// i'll make it for storing integers but i think theoretically you could adapt it to store anything hashed
+// getMin and getMax don't work properly, but they do it in O(1) time
 class Struct {
-	final ArrayList<Integer> entries = new ArrayList<>();
+	private final HashMap<String, Integer> elements = new HashMap<>();
+	private String min = "";
+	private String max = "";
 
-	void plus(int key) {
-		
+	void plus(String key) {
+		int val = elements.getOrDefault(key, 0);
+		elements.put(key, ++val);
+		if (elements.get(key) > elements.getOrDefault(max, Integer.MIN_VALUE)) max = key;
 	}
 
-	void minus(int key) {
-		
+	void minus(String key) {
+		int val = elements.get(key);
+		if (elements.put(key, --val) == 1) elements.remove(key);
+		if (elements.getOrDefault(key, Integer.MAX_VALUE) < elements.getOrDefault(min, Integer.MAX_VALUE)) min = key;
 	}
 
-	int getMax() {
-		return -1;
+	String getMax() {
+		return max;
 	}
 
-	int getMin() {
-		return -1;
+	String getMin() {
+		return min;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		elements.entrySet().forEach(entry -> builder.append(entry.getKey() + ": " + entry.getValue() + "\t"));
+		return builder.toString();
 	}
 }
