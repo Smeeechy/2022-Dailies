@@ -9,11 +9,12 @@ import java.util.ArrayList;
 class Main {
 	public static void main(String[] args) {
 		Integer[] nums = Arrays.stream(args).map(s -> Integer.parseInt(s)).toArray(Integer[]::new);
+		// Integer[] nums = new Integer[] {568, 12, 987, 56, 739};
 		System.out.println(Arrays.toString(nums));
 		System.out.println(beegNumber(nums));
 	}
 
-	public static int beegNumber(Integer[] nums) {
+	public static String beegNumber(Integer[] nums) {
 		StringBuilder builder = new StringBuilder();
 		ArrayList<Integer> pool = new ArrayList<>();
 		pool.addAll(Arrays.asList(nums));
@@ -24,21 +25,26 @@ class Main {
 			// iterate through pool to find max: next largest number with least digits
 			for (int num : pool) {
 				int numDigits = (int) Math.log10(num);
-				if (numDigits <= maxDigits) {
-					for (int i = numDigits; i >= 0; i--) {
-						int maxSigDig = (max / (int) Math.pow(10, i)) % 10;
-						int numSigDig = (num / (int) Math.pow(10, i)) % 10;
-						if (numSigDig > maxSigDig) max = num;
+				int maxSig = (max / (int) Math.pow(10, maxDigits)) % 10;
+				int numSig = (num / (int) Math.pow(10, numDigits)) % 10;
+				if (numSig > maxSig || numDigits <= maxDigits) {
+					for (int pow = (int) Math.max(numDigits, maxDigits); pow >= 0; pow--) {
+						int maxSigDig = (max / (int) Math.pow(10, pow)) % 10;
+						int numSigDig = (num / (int) Math.pow(10, pow)) % 10;
+						if (numSigDig > maxSigDig) {
+							max = num;
+							maxDigits = (int) Math.log10(max);
+						}
 					}
 				}
 			}
 			
 			// remove max from pool and append to result
 			builder.append(max);
-			pool.remove(new Integer(max));
+			pool.remove(Integer.valueOf(max));
 
 			// repeat until all numbers have been used
 		}
-		return Integer.parseInt(builder.toString());
+		return builder.toString();
 	}
 }
