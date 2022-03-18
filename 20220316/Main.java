@@ -26,6 +26,22 @@ class Main {
 	}
 
 	public static int[] findConcats(String[] words, String s) {
+		char[] chars = s.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			
+		}
 		return new int[1];
+	}
+
+	public static String[] possibleCombos(String[] words) {
+		ArrayList<String> result = new ArrayList<>();
+		for (int i = 0; i < words.length; i++) {
+			StringBuilder builder = new StringBuilder();
+			for (int j = 0; j < words.length; j++) {
+				if (i == j) continue;
+				
+			}
+		}
+		return result.toArray(String[]::new);
 	}
 }
