@@ -5,7 +5,7 @@ share the same row, column, or diagonal.
 */
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 
 class Main {
 	public static void main(String[] args) {
@@ -13,46 +13,32 @@ class Main {
 
 		Board board = new Board(n);
 
+		for (int x = 0; x < board.length; x++) {
+			for (int y = 0; y < board.length; y++) {
+				board.add(new Queen(board, x, y, true), x, y);
+			}
+		}
+
+		for (int x = 0; x < board.length; x++) {
+			for (int y = 0; y < board.length; y++) {
+				Piece queen = board.pieceAt(x, y);
+				if (queen == null) continue;
+				for (Cell cell : queen.getValidMoves()) {
+					cell.setPiece(null);
+				}
+			}
+		}
+
 		System.out.println(board);
-	}
-
-	// unused for prompt
-	public static void addBlackPieces(Board board) {
-		board.add(new Rook(0, 0, false), 0, 0);
-		board.add(new Knight(1, 0, false), 1, 0);
-		board.add(new Bishop(2, 0, false), 2, 0);
-		board.add(new Queen(3, 0, false), 3, 0);
-		board.add(new King(4, 0, false), 4, 0);
-		board.add(new Bishop(5, 0, false), 5, 0);
-		board.add(new Knight(6, 0, false), 6, 0);
-		board.add(new Rook(7, 0, false), 7, 0);
-
-		for (int i = 0; i < 8; i++) {
-			board.add(new Pawn(i, 1, false), i, 1);
-		}
-	}
-
-	// unused for prompt
-	public static void addWhitePieces(Board board) {
-		board.add(new Rook(0, 7, true), 0, 7);
-		board.add(new Knight(1, 7, true), 1, 7);
-		board.add(new Bishop(2, 7, true), 2, 7);
-		board.add(new Queen(3, 7, true), 3, 7);
-		board.add(new King(4, 7, true), 4, 7);
-		board.add(new Bishop(5, 7, true), 5, 7);
-		board.add(new Knight(6, 7, true), 6, 7);
-		board.add(new Rook(7, 7, true), 7, 7);
-
-		for (int i = 0; i < 8; i++) {
-			board.add(new Pawn(i, 1, true), i, 6);
-		}
 	}
 }
 
 class Board {
-	Cell[][] grid;
+	final Cell[][] grid;
+	final int length;
 
 	Board(int n) {
+		this.length = n;
 		this.grid = new Cell[n][n];
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
@@ -62,9 +48,21 @@ class Board {
 	}
 
 	void add(Piece piece, int x, int y) {
-		int n = this.grid.length;
+		int n = this.length;
 		if (x < 0 || y < 0 || x >= n || y >= n) return;
 		else this.grid[y][x].setPiece(piece);
+	}
+
+	Cell cellAt(int x, int y) {
+		int n = this.length;
+		if (x < 0 || y < 0 || x >= n || y >= n) return null;
+		else return grid[y][x];
+	}
+
+	Piece pieceAt(int x, int y) {
+		int n = this.length;
+		if (x < 0 || y < 0 || x >= n || y >= n) return null;
+		else return grid[y][x].piece;
 	}
 
 	@Override
@@ -106,11 +104,13 @@ class Cell {
 }
 
 abstract class Piece {
+	Board board;
 	int x, y;
 	boolean isWhite;
 	String name;
 
-	Piece(int x, int y, boolean isWhite, String name) {
+	Piece(Board board, int x, int y, boolean isWhite, String name) {
+		this.board = board;
 		this.x = x;
 		this.y = y;
 		this.isWhite = isWhite;
@@ -118,7 +118,12 @@ abstract class Piece {
 		else this.name = name.toUpperCase();
 	}
 
-	// ArrayList<Cell> getValidMoves();
+	void move(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	abstract ArrayList<Cell> getValidMoves();
 
 	@Override
 	public String toString() {
@@ -127,37 +132,97 @@ abstract class Piece {
 }
 
 class King extends Piece {
-	King(int x, int y, boolean isWhite) {
-		super(x, y, isWhite, "K");
+	King(Board board, int x, int y, boolean isWhite) {
+		super(board, x, y, isWhite, "K");
+	}
+
+	ArrayList<Cell> getValidMoves() {
+		ArrayList<Cell> validMoves = new ArrayList<>();
+		validMoves.add(this.board.cellAt(this.x - 1, this.y));
+		validMoves.add(this.board.cellAt(this.x + 1, this.y));
+		validMoves.add(this.board.cellAt(this.x, this.y + 1));
+		validMoves.add(this.board.cellAt(this.x, this.y - 1));
+		return validMoves;
 	}
 }
 
 class Queen extends Piece {
-	Queen(int x, int y, boolean isWhite) {
-		super(x, y, isWhite, "Q");
+	Queen(Board board, int x, int y, boolean isWhite) {
+		super(board, x, y, isWhite, "Q");
+	}
+
+	ArrayList<Cell> getValidMoves() {
+		HashSet<Cell> validMoves = new HashSet<>();
+		for (int i = 0; i < this.board.length; i++) {
+			validMoves.add(this.board.cellAt(this.x + i, this.y + i));
+			validMoves.add(this.board.cellAt(this.x + i, this.y - i));
+			validMoves.add(this.board.cellAt(this.x - i, this.y + i));
+			validMoves.add(this.board.cellAt(this.x - i, this.y - i));			
+		}
+		for (int i = 0; i < this.board.length; i++) {
+			validMoves.add(this.board.cellAt(i, this.y));
+			validMoves.add(this.board.cellAt(this.x, i));
+		}
+		validMoves.remove(this.board.cellAt(this.x, this.y));
+		validMoves.remove(null);
+		return new ArrayList<Cell>(validMoves);
 	}
 }
 
 class Bishop extends Piece {
-	Bishop(int x, int y, boolean isWhite) {
-		super(x, y, isWhite, "B");
+	Bishop(Board board, int x, int y, boolean isWhite) {
+		super(board, x, y, isWhite, "B");
+	}
+
+	ArrayList<Cell> getValidMoves() {
+		ArrayList<Cell> validMoves = new ArrayList<>();
+		for (int i = 0; i < this.board.length; i++) {
+			validMoves.add(this.board.cellAt(this.x + i, this.y + i));
+			validMoves.add(this.board.cellAt(this.x + i, this.y - i));
+			validMoves.add(this.board.cellAt(this.x - i, this.y + i));
+			validMoves.add(this.board.cellAt(this.x - i, this.y - i));			
+		}
+		validMoves.remove(this.board.cellAt(this.x, this.y));
+		return validMoves;
 	}
 }
 
 class Knight extends Piece {
-	Knight(int x, int y, boolean isWhite) {
-		super(x, y, isWhite, "N");
+	Knight(Board board, int x, int y, boolean isWhite) {
+		super(board, x, y, isWhite, "N");
+	}
+
+	ArrayList<Cell> getValidMoves() {
+		ArrayList<Cell> validMoves = new ArrayList<>();
+		
+		return validMoves;
 	}
 }
 
 class Rook extends Piece {
-	Rook(int x, int y, boolean isWhite) {
-		super(x, y, isWhite, "R");
+	Rook(Board board, int x, int y, boolean isWhite) {
+		super(board, x, y, isWhite, "R");
+	}
+
+	ArrayList<Cell> getValidMoves() {
+		ArrayList<Cell> validMoves = new ArrayList<>();
+		for (int i = 0; i < this.board.length; i++) {
+			validMoves.add(this.board.cellAt(i, this.y));
+			validMoves.add(this.board.cellAt(this.x, i));
+		}
+		validMoves.remove(this.board.cellAt(this.x, this.y));
+		return validMoves;
 	}
 }
 
 class Pawn extends Piece {
-	Pawn(int x, int y, boolean isWhite) {
-		super(x, y, isWhite, "P");
+	Pawn(Board board, int x, int y, boolean isWhite) {
+		super(board, x, y, isWhite, "P");
+	}
+
+	ArrayList<Cell> getValidMoves() {
+		ArrayList<Cell> validMoves = new ArrayList<>();
+		
+		return validMoves;
 	}
 }
