@@ -15,10 +15,8 @@ let left = 0
 let right = popWeights.length - 1
 
 while (left < right) {
-    console.log(left, right)
     let l = popWeights[right]
     let r = popWeights[left]
-    console.log(l, r)
     if (r > (k - l)) {
         total += 1
         right -= 1

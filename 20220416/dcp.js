@@ -23,7 +23,7 @@ for (let i = 0; i + 1 < args.length; i += 2) {
 }
 
 let sixDigitNums = [...Array(900_000).keys()].map(n => (n + 100_000).toString())
-Object.entries(dict).forEach(([key, value]) => sixDigitNums = sixDigitNums.filter(n => compare(n, key) >= value))
+Object.entries(dict).forEach(([key, value]) => sixDigitNums = sixDigitNums.filter(n => compare(n, key) == value))
 
 if (sixDigitNums.length > 0) {
     console.log(`There are ${sixDigitNums.length} possible solutions:`, sixDigitNums)
