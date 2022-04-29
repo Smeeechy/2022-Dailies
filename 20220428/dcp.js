@@ -50,9 +50,17 @@ for (const el of args.slice(1).map(Number)) {
     list.add(el)
 }
 
+const result = removeKthLastElement(k, list)
+console.log(result)
+
 function removeKthLastElement(k, list) {
     let current = list.tail
     for (let i = 1; i < k; i++) {
         current = current.prev
     }
+    let temp = current.prev
+    current.prev.next = current.next
+    current.next.prev = temp
+    while (current.prev != null) current = current.prev
+    return current
 }
