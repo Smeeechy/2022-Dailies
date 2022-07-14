@@ -1,5 +1,5 @@
 /*
-
+Given an array of intervals, merge all overlapping intervals and return the result.
 */
 
 const mergeOverlappingIntervals = array => {
