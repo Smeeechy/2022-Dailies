@@ -1,30 +1,25 @@
 /*
-Given a string, reverse the ordering of all words within it.
-Words can contain special characters.
-Whitespace should be preserved.
-You are not allowed to use split() or reverse().
+Given a circular array of integers, return an array containing the next greatest element for each index.
+If there is no next greatest element, that index should contain -1.
+
+[1, 3, 5, 3, 1] ==> [3, 5, -1, 5, 3]
 */
 
-const reverseWordsInString = string => {
-  const stack = []
-  for (let i = 0; i < string.length; i++) {
-    if (string[i] === ' ') {
-      let whitespace = ''
-      while (i < string.length && string[i] === ' ') whitespace += string[i++]
-      stack.push(whitespace)
-    } else {
-      let word = ''
-      while (i < string.length && string[i] !== ' ') word += string[i++]
-      stack.push(word)
+const nextGreaterElement = array => {
+  const result = new Array(array.length).fill(-1)
+  for (let i = 0; i < array.length; i++) {
+    for (let j = 0; j < array.length; j++) {
+      const index = (j + i) % array.length
+      if (array[index] > array[i]) {
+        result[i] = array[index]
+        break
+      }
     }
-    i--
   }
-  let result = ''
-  while (stack.length > 0) result += stack.pop()
   return result
 }
 
 const args = process.argv.slice(2)
-const string = args[0]
-const result = reverseWordsInString(string)
+const array = args.map(Number)
+const result = nextGreaterElement(array)
 console.log(result)
