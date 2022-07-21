@@ -1,6 +1,6 @@
 /*
-Given a circular array of integers, return an array containing the next greatest element for each index.
-If there is no next greatest element, that index should contain -1.
+Given a circular array of integers, return an array containing the next greater element for each index.
+If there is no next greater element, that index should contain -1.
 
 [1, 3, 5, 3, 1] ==> [3, 5, -1, 5, 3]
 */
