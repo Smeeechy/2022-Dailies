@@ -20,7 +20,7 @@ const findIslands = matrix => {
   // matrix of booleans for whether or not a cell has already been checked
   const visited = new Array(matrix.length)
     .fill()
-    .map(row => new Array(matrix[0].length).fill(false))
+    .map(_ => new Array(matrix[0].length).fill(false))
 
   for (let row = 1; row < matrix.length - 1; row++) {
     for (let col = 1; col < matrix[0].length - 1; col++) {
@@ -52,12 +52,12 @@ const neighbors = (matrix, row, col) => {
     [row - 1, col],
     [row, col + 1],
     [row, col - 1]
-  ].filter(neighbor =>
-    neighbor[0] >= 0 &&
-    neighbor[0] < matrix.length &&
-    neighbor[1] >= 0 &&
-    neighbor[1] < matrix[0].length
-  ).filter(neighbor => matrix[neighbor[0]][neighbor[1]] === 1)
+  ].filter(([nRow, nCol]) =>
+    nRow >= 0 &&
+    nRow < matrix.length &&
+    nCol >= 0 &&
+    nCol < matrix[0].length
+  ).filter(([nRow, nCol]) => matrix[nRow][nCol] === 1)
 }
 
 // returns whether or not the given cell is on the matrix boundary
