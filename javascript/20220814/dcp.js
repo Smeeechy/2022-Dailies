@@ -21,3 +21,6 @@ const heightBalanced = tree => {
 }
 
 const args = process.argv.slice(2)
+const tree = JSON.parse(args[0])
+const result = heightBalancedBinaryTree(tree)
+console.log(result)
