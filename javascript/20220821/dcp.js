@@ -11,15 +11,15 @@ const quicksort = (array, from = 0, to = array.length - 1) => {
 
 const partition = (array, from, to) => {
   let pivot = array[to]
-  let i = from - 1
-  for (let j = from; j < to; j++) {
-    if (array[j] < pivot) {
-      i++
-      swap(array, i, j)
+  let left = from - 1
+  for (let right = from; right < to; right++) {
+    if (array[right] < pivot) {
+      left++
+      swap(array, left, right)
     }
   }
-  swap(array, i + 1, to)
-  return i + 1
+  swap(array, left + 1, to)
+  return left + 1
 }
 
 const swap = (array, i, j) => {
