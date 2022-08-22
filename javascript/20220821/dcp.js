@@ -1,5 +1,5 @@
 /*
-
+Implement the quicksort algorithm.
 */
 
 const quicksort = (array, from = 0, to = array.length - 1) => {
