@@ -10,6 +10,7 @@ ends up at each index in the last row of the grid.
 */
 
 const waterfallStreams = (grid, source) => {
+  // placing the water source
   grid[0][source] = -1
 
   let rowIndex = 1
@@ -18,55 +19,48 @@ const waterfallStreams = (grid, source) => {
     const lowerRow = grid[rowIndex]
 
     for (let columnIndex = 0; columnIndex < upperRow.length; columnIndex++) {
-      // if there is water in a column in the upper row:
+      // if there is water in a column in the upper row,
       if (upperRow[columnIndex] < 0) {
-        // and there is not a wall below it:
-        if (lowerRow[columnIndex] === 0) {
+        // and there is not a wall below it,
+        if (lowerRow[columnIndex] < 1) {
           // let the same amount of water flow down into that space
-          lowerRow[columnIndex] = upperRow[columnIndex]
+          lowerRow[columnIndex] += upperRow[columnIndex]
         } else {
-          // otherwise, spread half the water left and half right until they either
-          // encounter an empty space below them or they hit a wall
+          // otherwise, split the water volume
           const splitWaterVolume = upperRow[columnIndex] / 2
-          for (let leftIndex = columnIndex - 1; leftIndex >= 0; leftIndex--) {
+
+          // pass half of it to the left until it can fall into an
+          // empty space below it or it hits a wall and gets stuck
+          let leftIndex = columnIndex - 1
+          while (leftIndex >= 0) {
             if (upperRow[leftIndex] === 1) break
-            if (lowerRow[leftIndex] === 0) {
-              lowerRow[leftIndex] = splitWaterVolume
+            else if (lowerRow[leftIndex] < 1) {
+              lowerRow[leftIndex] += splitWaterVolume
               break
-            }
+            } else leftIndex--
           }
-          for (let rightIndex = columnIndex + 1; rightIndex < upperRow.length; rightIndex++) {
+
+          // and pass the other half to the right just the same
+          let rightIndex = columnIndex + 1
+          while (rightIndex < lowerRow.length) {
             if (upperRow[rightIndex] === 1) break
-            if (lowerRow[rightIndex] === 0) {
-              lowerRow[rightIndex] = splitWaterVolume
+            else if (lowerRow[rightIndex] < 1) {
+              lowerRow[rightIndex] += splitWaterVolume
               break
-            }
+            } else rightIndex++
           }
         }
       }
     }
     rowIndex++
   }
+  
+  // return the volume in the last row as a percentage of the total
   return grid[grid.length - 1].map(water => Math.abs(water) * 100)
 }
 
 const args = process.argv.slice(2)
-// const grid = JSON.parse(args[0])
-// const source = parseInt(args[1])
-const grid = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
-  [0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-]
-const source = 8
+const grid = JSON.parse(args[0])
+const source = parseInt(args[1])
 const result = waterfallStreams(grid, source)
 console.log(result)
