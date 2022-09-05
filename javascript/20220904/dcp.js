@@ -132,29 +132,3 @@ class DoublyLinkedList {
     return str
   }
 }
-
-const args = process.argv.slice(2)
-const nodeList = [
-  new Node(1),
-  new Node(2),
-  new Node(3),
-  new Node(3),
-  new Node(3),
-  new Node(4),
-  new Node(5),
-  new Node(6)
-]
-const list = new DoublyLinkedList()
-list.setHead(nodeList[6])
-list.setHead(nodeList[5])
-list.setHead(nodeList[2])
-list.setHead(nodeList[1])
-list.setHead(nodeList[0])
-list.setHead(nodeList[5])
-list.setTail(nodeList[7])
-list.insertBefore(nodeList[7], nodeList[2])
-list.insertAfter(nodeList[7], nodeList[3])
-list.insertAtPosition(1, nodeList[4])
-list.removeNodesWithValue(3)
-list.remove(nodeList[1])
-console.log(list.containsNodeWithValue(5))
