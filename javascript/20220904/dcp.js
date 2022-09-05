@@ -29,36 +29,132 @@ class DoublyLinkedList {
   }
 
   setHead(node) {
-    // Write your code here.
+    if (!this.head) {
+      this.head = node
+      this.tail = node
+    } else {
+      if (this.containsNode(node)) this.remove(node)
+      node.next = this.head
+      this.head.prev = node
+      this.head = node
+    }
   }
 
   setTail(node) {
-    // Write your code here.
+    if (!this.tail) {
+      this.head = node
+      this.tail = node
+    } else {
+      if (this.containsNode(node)) this.remove(node)
+      node.prev = this.tail
+      this.tail.next = node
+      this.tail = node
+    }
   }
 
   insertBefore(node, nodeToInsert) {
-    // Write your code here.
+    if (this.containsNode(nodeToInsert)) this.remove(nodeToInsert)
+    if (node === this.head) this.setHead(nodeToInsert)
+    else {
+      const oldPrev = node.prev
+      node.prev = nodeToInsert
+      nodeToInsert.prev = oldPrev
+      if (oldPrev) oldPrev.next = nodeToInsert
+      nodeToInsert.next = node
+    }
   }
 
   insertAfter(node, nodeToInsert) {
-    // Write your code here.
+    if (this.containsNode(nodeToInsert)) this.remove(nodeToInsert)
+    if (node === this.tail) this.setTail(nodeToInsert)
+    else {
+      const oldNext = node.next
+      node.next = nodeToInsert
+      nodeToInsert.next = oldNext
+      if (oldNext) oldNext.prev = nodeToInsert
+      nodeToInsert.prev = node
+    }
   }
 
   insertAtPosition(position, nodeToInsert) {
-    // Write your code here.
+    if (this.containsNode(nodeToInsert)) this.remove(nodeToInsert)
+    let current = this.head
+    for (let index = 1; index < position; index++) current = current.next
+    if (current === this.head) this.setHead(nodeToInsert)
+    else this.insertBefore(current, nodeToInsert)
   }
 
   removeNodesWithValue(value) {
-    // Write your code here.
+    let current = this.head
+    while (current) {
+      const next = current.next
+      if (current.value === value) this.remove(current)
+      current = next
+    }
   }
 
   remove(node) {
-    // Write your code here.
+    const nodePrev = node.prev
+    const nodeNext = node.next
+    if (node === this.head) this.head = nodeNext
+    if (node === this.tail) this.tail = nodePrev
+    if (nodePrev) nodePrev.next = nodeNext
+    if (nodeNext) nodeNext.prev = nodePrev
+    node.prev = null
+    node.next = null
   }
 
   containsNodeWithValue(value) {
-    // Write your code here.
+    let current = this.head
+    while (current) {
+      if (current.value === value) return true
+      current = current.next
+    }
+    return false
+  }
+
+  containsNode(node) {
+    let current = this.head
+    while (current) {
+      if (current === node) return true
+      current = current.next
+    }
+    return false
+  }
+
+  toString() {
+    let str = '' + this.head.value
+    let current = this.head.next
+    while (current) {
+      str += ' <-> ' + current.value
+      current = current.next
+    }
+    return str
   }
 }
 
 const args = process.argv.slice(2)
+const nodeList = [
+  new Node(1),
+  new Node(2),
+  new Node(3),
+  new Node(3),
+  new Node(3),
+  new Node(4),
+  new Node(5),
+  new Node(6)
+]
+const list = new DoublyLinkedList()
+list.setHead(nodeList[6])
+list.setHead(nodeList[5])
+list.setHead(nodeList[2])
+list.setHead(nodeList[1])
+list.setHead(nodeList[0])
+list.setHead(nodeList[5])
+list.setTail(nodeList[7])
+list.insertBefore(nodeList[7], nodeList[2])
+list.insertAfter(nodeList[7], nodeList[3])
+list.insertAtPosition(1, nodeList[4])
+list.removeNodesWithValue(3)
+list.remove(nodeList[1])
+console.log(list.containsNodeWithValue(5))
