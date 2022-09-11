@@ -11,3 +11,6 @@ const rightSiblingTree = (node, newRight = null) => {
 }
 
 const args = process.argv.slice(2)
+const head = JSON.parse(args[0])
+const result = rightSiblingTree(head)
+console.log(result)
