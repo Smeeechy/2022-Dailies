@@ -67,6 +67,7 @@ class Node {
   }
 }
 
+// not done but it's late and i'm tired
 const aStarAlgorithm = (startRow, startCol, endRow, endCol, graph) => {
   const grid = new Grid(graph, startRow, startCol, endRow, endCol)
   let lastNode = null
