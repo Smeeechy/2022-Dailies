@@ -19,3 +19,6 @@ export const maxPathSum = (tree: BinaryTree | null, isRoot = true): number[] | n
 }
 
 const args = process.argv.slice(2)
+const tree = JSON.parse(args[0])
+const result = maxPathSum(tree)
+console.log(result)
