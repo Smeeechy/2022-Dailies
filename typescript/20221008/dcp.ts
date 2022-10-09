@@ -14,18 +14,19 @@ export const longestStringChain = (strings: string[]): string[] => {
   strings.sort((a, b) => a.length - b.length)
   const map: { [key: string]: string[] } = Object.fromEntries(strings.map(s => [s, [s]]))
   for (let i = 0; i < strings.length; i++) {
-    const startingString = strings[i]
-    for (let j = 0; j < startingString.length; j++) {
-      const newString = `${startingString}`.replace(startingString.charAt(j), '')
-      if (newString in map) map[startingString] = [startingString, ...map[newString]]
+    const string = strings[i]
+    for (let j = 0; j < string.length; j++) {
+      const newString = `${string}`.replace(string.charAt(j), '')
+      if (newString in map && map[newString].length + 1 > map[string].length) map[string] = [string, ...map[newString]]
     }
   }
-  return Object.entries(map)
-    .sort(([, a], [, b]) => a.length - b.length)
-    .pop()![1]
+  const result = Object.entries(map)
+    .map(([, stringChain]) => stringChain)
+    .sort((a, b) => a.length - b.length)
+    .pop()!
+  return result.length === 1 ? [] : result
 }
 
 const args = process.argv.slice(2)
-const strings = ['abde', 'abc', 'abd', 'abcde', 'ade', 'ae', '1abde', 'abcdef']
-const result = longestStringChain(strings)
+const result = longestStringChain(args)
 console.log(result)
