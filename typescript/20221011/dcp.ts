@@ -1,5 +1,6 @@
 /*
-
+Given an integer k and an array of numbers where each element is at most k indices away
+from its sorted position, sort the array in-place.
 */
 
 export const sortKSortedArray = (array: number[], k: number): number[] => {
@@ -19,7 +20,7 @@ const swap = (array: number[], i: number, j: number): void => {
 }
 
 const args = process.argv.slice(2)
-const array = [3, 2, 1, 5, 4, 7, 6, 5]
-const k = 3
+const k = parseInt(args[0])
+const array = args.slice(1).map(Number)
 const result = sortKSortedArray(array, k)
 console.log(result)
