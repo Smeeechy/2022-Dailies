@@ -7,6 +7,8 @@ answer[i] == "Buzz" if i is divisible by 5.
 answer[i] == i (as a string) if none of the above conditions are true.
 */
 
+// hey what can i say i'm a real michaelangelo in this home stretch
+// really pushing myself with hard problems everyday huh
 export const fizzBuzz = (n: number): string[] => {
   return new Array(n).fill('').map((_, index) => {
     const num = index + 1
