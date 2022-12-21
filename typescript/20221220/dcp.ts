@@ -34,20 +34,3 @@ const inOrderTraversal = (root: TreeNode | null, result: number[]): void => {
   if (root.right) inOrderTraversal(root.right, result)
   else result.push(-Infinity)
 }
-
-const test: TreeNode = {
-  val: 1,
-  left: {
-    val: 2,
-    left: { val: 2, left: null, right: null },
-    right: null
-  },
-  right: {
-    val: 2,
-    left: { val: 2, left: null, right: null },
-    right: null
-  }
-}
-
-const result = isSymmetric(test)
-console.log(result)
