@@ -12,6 +12,7 @@ return true if you can provide every customer with the correct change, or false
 otherwise.
 */
 
+// this is my very last daily coding problem. I've done one every day for an entire year. now it ends.
 export const lemonadeChange = (bills: number[]): boolean => {
   let change: { [key: number]: number } = { 5: 0, 10: 0, 20: 0 }
   for (const bill of bills) {
